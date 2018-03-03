@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Single osc start and stop</title>
+
+  <script>
+    var ac = new AudioContext();
+    var gain = ac.createGain(0.0);
+    var osc = ac.createOscillator();
+
+    gain.gain.value = 0.0;
+    osc.frequency.value = 440;
+    osc.type = "square"
+    
+    gain.connect(ac.destination);
+    osc.connect(gain);
+    osc.start(0);
+
+    var playing = false;
+
+    window.startStop = function() {
+      gain.gain.value = playing ? 0.0 : 1.0;
+      playing = !playing;
+    };
+
+  </script>
+</head>
+<body>
+<p>
+<button onclick="startStop()">Start/Stop</button>
+</p>
+</body>
+</html>
+
