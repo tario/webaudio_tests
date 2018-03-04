@@ -2,7 +2,7 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="main.css">
-  <title>Single osc start and stop using touch events </title>
+  <title>Single osc slow start and stop (fade) using touch events </title>
 
   <script>
     var ac = new AudioContext();
@@ -10,7 +10,6 @@
     var osc = ac.createOscillator();
 
     gain.gain.value = 0.0;
-    osc.frequency.value = 440;
     osc.type = "square"
     
     gain.connect(ac.destination);
@@ -19,10 +18,27 @@
 
     var playing = false;
 
-    window.onload = function() {
+    var getFreqFromTouchEvent = function(e) {
+      var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+      var x = 0;
+      var y = 0;
+      for (var i=0; i<e.touches.length; i++) {
+        x += e.touches[i].clientX;
+        y += e.touches[i].clientY;
+      }
+
+      exp = 4 * x/w;
+
+      return 110*Math.pow(2,exp);
+    };
+
+    window.onload = function(e) {
       var div = document.getElementById("mainpanel");
       var backgroundDiv = document.getElementById("backgroundDiv");
       div.addEventListener('touchstart', function(e) {
+        osc.frequency.cancelScheduledValues(0.0);
+        osc.frequency.setTargetAtTime(getFreqFromTouchEvent(e), ac.currentTime, 0.000001);
+
         backgroundDiv.style.backgroundColor = "red";
         gain.gain.setTargetAtTime(1.0, ac.currentTime, 0.000001);
 
@@ -33,6 +49,12 @@
         backgroundDiv.style.backgroundColor = "white";
         gain.gain.setTargetAtTime(0.0, ac.currentTime, 0.000001);
 
+        e.preventDefault();
+      });
+
+      div.addEventListener('touchmove', function(e) {
+        osc.frequency.cancelScheduledValues(0.0);
+        osc.frequency.setTargetAtTime(getFreqFromTouchEvent(e), ac.currentTime, 0.000001);
         e.preventDefault();
       });
     };
