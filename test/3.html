@@ -21,23 +21,31 @@
 
     window.onload = function() {
       var div = document.getElementById("mainpanel");
-      div.addEventListener('touchstart', function() {
-        div.style.backgroundColor = "red";
+      var backgroundDiv = document.getElementById("backgroundDiv");
+      div.addEventListener('touchstart', function(e) {
+        backgroundDiv.style.backgroundColor = "red";
         gain.gain.setTargetAtTime(1.0, ac.currentTime, 0.05);
+
+        e.preventDefault();
       });
 
-      div.addEventListener('touchend', function() {
-        div.style.backgroundColor = "white";
+      div.addEventListener('touchend', function(e) {
+        backgroundDiv.style.backgroundColor = "white";
         gain.gain.setTargetAtTime(0.0, ac.currentTime, 0.05);
+
+        e.preventDefault();
       });
     };
 
   </script>
 </head>
 <body>
-<p>
-<div id="mainpanel" class="allscreen noselect"><p>Start/Stop (touch)</p></div>
-</p>
+
+<div id="mainContainer" class="allscreen">
+  <div class="overlay" id="backgroundDiv"></div>
+  <div class="overlay"><p>Start/Stop (touch)</p></div>
+  <div id="mainpanel" class="fullwidth overlay"></div>
+</div>
 </body>
 </html>
 
