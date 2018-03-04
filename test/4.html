@@ -27,6 +27,9 @@
         y += e.touches[i].clientY;
       }
 
+      x = x / e.touches.length;
+      y = y / e.touches.length;
+
       exp = 4 * x/w;
 
       return 110*Math.pow(2,exp);
@@ -37,7 +40,7 @@
       var backgroundDiv = document.getElementById("backgroundDiv");
       div.addEventListener('touchstart', function(e) {
         osc.frequency.cancelScheduledValues(0.0);
-        osc.frequency.setTargetAtTime(getFreqFromTouchEvent(e), ac.currentTime, 0.5);
+        osc.frequency.setTargetAtTime(getFreqFromTouchEvent(e), ac.currentTime, 0.15);
 
         backgroundDiv.style.backgroundColor = "red";
         gain.gain.setTargetAtTime(1.0, ac.currentTime, 0.000001);
@@ -54,7 +57,7 @@
 
       div.addEventListener('touchmove', function(e) {
         osc.frequency.cancelScheduledValues(0.0);
-        osc.frequency.setTargetAtTime(getFreqFromTouchEvent(e), ac.currentTime, 0.5);
+        osc.frequency.setTargetAtTime(getFreqFromTouchEvent(e), ac.currentTime, 0.15);
         e.preventDefault();
       });
     };
