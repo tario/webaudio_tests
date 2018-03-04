@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="main.css">
+  <title>Single osc slow start and stop (fade) using touch events </title>
+
+  <script>
+    var ac = new AudioContext();
+    var gain = ac.createGain(0.0);
+    var osc = ac.createOscillator();
+
+    gain.gain.value = 0.0;
+    osc.frequency.value = 440;
+    osc.type = "square"
+    
+    gain.connect(ac.destination);
+    osc.connect(gain);
+    osc.start(0);
+
+    var playing = false;
+
+    window.onload = function() {
+      var div = document.getElementById("mainpanel");
+      div.addEventListener('touchstart', function() {
+        div.style.backgroundColor = "red";
+        gain.gain.setTargetAtTime(1.0, ac.currentTime, 0.05);
+      });
+
+      div.addEventListener('touchend', function() {
+        div.style.backgroundColor = "white";
+        gain.gain.setTargetAtTime(0.0, ac.currentTime, 0.05);
+      });
+    };
+
+  </script>
+</head>
+<body>
+<p>
+<div id="mainpanel" class="allscreen">Start/Stop</div>
+</p>
+</body>
+</html>
+
