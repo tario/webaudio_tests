@@ -2,7 +2,7 @@
 <html>
 <head>
   <link rel="stylesheet" type="text/css" href="main.css">
-  <title>Single osc slow start and stop (fade) using touch events </title>
+  <title>Single osc panel variable frequency using touch events </title>
 
   <script>
     var ac = new AudioContext();
@@ -37,7 +37,7 @@
       var backgroundDiv = document.getElementById("backgroundDiv");
       div.addEventListener('touchstart', function(e) {
         osc.frequency.cancelScheduledValues(0.0);
-        osc.frequency.setTargetAtTime(getFreqFromTouchEvent(e), ac.currentTime, 0.000001);
+        osc.frequency.setTargetAtTime(getFreqFromTouchEvent(e), ac.currentTime, 0.5);
 
         backgroundDiv.style.backgroundColor = "red";
         gain.gain.setTargetAtTime(1.0, ac.currentTime, 0.000001);
@@ -54,7 +54,7 @@
 
       div.addEventListener('touchmove', function(e) {
         osc.frequency.cancelScheduledValues(0.0);
-        osc.frequency.setTargetAtTime(getFreqFromTouchEvent(e), ac.currentTime, 0.000001);
+        osc.frequency.setTargetAtTime(getFreqFromTouchEvent(e), ac.currentTime, 0.5);
         e.preventDefault();
       });
     };
@@ -65,10 +65,9 @@
 
 <div id="mainContainer" class="allscreen">
   <div class="overlay" id="backgroundDiv"></div>
-  <div class="overlay"><p>Start/Stop (touch1)</p></div>
+  <div class="overlay"><p>Multiple freq oscilator (touch)</p></div>
   <div id="mainpanel" class="fullwidth overlay"></div>
 </div>
 </body>
 </html>
-
 
