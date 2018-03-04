@@ -24,14 +24,14 @@
       var backgroundDiv = document.getElementById("backgroundDiv");
       div.addEventListener('touchstart', function(e) {
         backgroundDiv.style.backgroundColor = "red";
-        gain.gain.setTargetAtTime(1.0, ac.currentTime, 0.0000001);
+        gain.gain.setTargetAtTime(1.0, ac.currentTime, 0.05);
 
         e.preventDefault();
       });
 
       div.addEventListener('touchend', function(e) {
         backgroundDiv.style.backgroundColor = "white";
-        gain.gain.setTargetAtTime(0.0, ac.currentTime, 0.0000001);
+        gain.gain.setTargetAtTime(0.0, ac.currentTime, 0.05);
 
         e.preventDefault();
       });
@@ -43,7 +43,7 @@
 
 <div id="mainContainer" class="allscreen">
   <div class="overlay" id="backgroundDiv"></div>
-  <div class="overlay"><p>Start/Stop (touch0)</p></div>
+  <div class="overlay"><p>Start/Stop (touch)</p></div>
   <div id="mainpanel" class="fullwidth overlay"></div>
 </div>
 </body>
