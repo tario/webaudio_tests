@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="main.css">
+  <style>
+    .key {
+      width: 97vw;
+      height: 50px;
+      border-color: black;
+      border-width: 1px;
+      border-style: solid;
+    }
+  </style>
+  <title>Touch keyboard pad linked to square osc</title>
+
+  <script>
+    var ac = new AudioContext();
+    var gain = ac.createGain(0.0);
+    var osc = ac.createOscillator();
+
+    gain.gain.value = 0.0;
+    osc.type = "square"
+    
+    gain.connect(ac.destination);
+    osc.connect(gain);
+    osc.start(0);
+
+    window.onload = function(e) {
+      var allKeys = document.querySelectorAll(".key");
+      var mainPanel = document.getElementById("mainpanel");
+      var keyHeight = allKeys[0].offsetHeight;
+
+      var handleUnTouch = function(e) {
+        allKeys.forEach(function(el) {
+          el.style.backgroundColor = "white";
+        });
+
+        gain.gain.setTargetAtTime(0.0, ac.currentTime, 0.14);
+        e.preventDefault();
+      };
+
+      var handleTouch = function(e) {
+        var index = Math.floor(e.touches[0].clientY/keyHeight);
+        var enabledKey = allKeys[index];
+        allKeys.forEach(function(el) {
+          el.style.backgroundColor = "white";
+        });
+        enabledKey.style.backgroundColor = "red";
+
+        var freq = 220*Math.pow(2, index/12);
+        osc.frequency.cancelScheduledValues(0.0);
+        osc.frequency.setTargetAtTime(freq, ac.currentTime, 0.0000001);
+        gain.gain.setTargetAtTime(1.0, ac.currentTime, 0.000001);
+
+        e.preventDefault();
+      };
+
+      mainPanel.addEventListener('touchmove', handleTouch);
+      mainPanel.addEventListener('touchstart', handleTouch);
+      mainPanel.addEventListener('touchend', handleUnTouch);
+    };
+
+  </script>
+</head>
+<body>
+
+<div id="mainContainer" class="allscreen">
+  <div class="overlay" id="backgroundDiv"></div>
+  <div class="fullwidth overlay">
+    <div class="key"></div>
+    <div class="key"></div>
+    <div class="key"></div>
+    <div class="key"></div>
+    <div class="key"></div>
+    <div class="key"></div>
+
+    <div class="key"></div>
+    <div class="key"></div>
+    <div class="key"></div>
+    <div class="key"></div>
+    <div class="key"></div>
+    <div class="key"></div>
+  </div>
+  <div id="mainpanel" class="fullwidth overlay">
+  </div>
+</div>
+</body>
+</html>
+
