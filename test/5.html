@@ -31,26 +31,34 @@
       var keyHeight = allKeys[0].offsetHeight;
 
       var handleUnTouch = function(e) {
-        allKeys.forEach(function(el) {
-          el.style.backgroundColor = "white";
+        ac.resume().then(function() {
+          allKeys.forEach(function(el) {
+            el.style.backgroundColor = "white";
+          });
+
+          gain.gain.setTargetAtTime(0.0, ac.currentTime, 0.14);
         });
 
-        gain.gain.setTargetAtTime(0.0, ac.currentTime, 0.14);
         e.preventDefault();
       };
 
       var handleTouch = function(e) {
-        var index = Math.floor(e.touches[0].clientY/keyHeight);
-        var enabledKey = allKeys[index];
-        allKeys.forEach(function(el) {
-          el.style.backgroundColor = "white";
-        });
-        enabledKey.style.backgroundColor = "red";
+        ac.resume().then(function() {
+          var index = Math.floor(e.touches[0].clientY/keyHeight);
+          var enabledKey = allKeys[index];
 
-        var freq = 220*Math.pow(2, index/12);
-        osc.frequency.cancelScheduledValues(0.0);
-        osc.frequency.setTargetAtTime(freq, ac.currentTime, 0.0000001);
-        gain.gain.setTargetAtTime(1.0, ac.currentTime, 0.000001);
+          if (!enabledKey) return;
+
+          allKeys.forEach(function(el) {
+            el.style.backgroundColor = "white";
+          });
+          enabledKey.style.backgroundColor = "red";
+
+          var freq = 220*Math.pow(2, index/12);
+          osc.frequency.cancelScheduledValues(0.0);
+          osc.frequency.setTargetAtTime(freq, ac.currentTime, 0.0000001);
+          gain.gain.setTargetAtTime(1.0, ac.currentTime, 0.000001);
+        });
 
         e.preventDefault();
       };
